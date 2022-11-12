@@ -1,5 +1,6 @@
 package com.example.demo.pessoa;
 
+import com.example.demo.validadores.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PessoaService {
@@ -24,6 +26,14 @@ private final PessoaRepository _pessoaRepository;
     }
 
     public void adicionarPessoa(Pessoa pessoa) {
-        System.out.println(pessoa.getNomePessoa());
+        boolean isValid;
+
+        isValid = Utils
+                .executeCheck(pessoa.getCpfPessoa(),
+                        pessoa.getDataNascimentoPessoa().toString(), "yyyy-MM-dd");
+        if(isValid){
+            _pessoaRepository.save(pessoa);
+
+        }
     }
 }
