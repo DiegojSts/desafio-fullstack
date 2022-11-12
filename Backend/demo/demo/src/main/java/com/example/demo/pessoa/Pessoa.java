@@ -1,6 +1,7 @@
 package com.example.demo.pessoa;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Entity
@@ -17,8 +18,12 @@ public class Pessoa {
             generator = "pessoa_sequence"
     )
     private int idPessoa;
+
+    @NotBlank(message = "Nome obrigatório")
     private String nomePessoa;
+    @NotBlank(message = "CPF obrigatório")
     private String cpfPessoa;
+    @NotNull
     private LocalDate dataNascimentoPessoa;
 
     public Pessoa (){}

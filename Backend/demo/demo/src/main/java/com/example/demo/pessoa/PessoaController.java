@@ -2,6 +2,9 @@ package com.example.demo.pessoa;
 import com.example.demo.validadores.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RestController
@@ -20,7 +23,7 @@ public class PessoaController {
     }
 
     @PostMapping
-    public void adicionarPessoa(@RequestBody Pessoa pessoa){
+    public void adicionarPessoa(@Valid @RequestBody @NotBlank Pessoa pessoa){
 
             this._pessoaService.adicionarPessoa(pessoa);
 
