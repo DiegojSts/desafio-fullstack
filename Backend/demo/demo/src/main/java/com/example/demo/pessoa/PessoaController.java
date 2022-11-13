@@ -1,6 +1,8 @@
 package com.example.demo.pessoa;
 import com.example.demo.validadores.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,9 +31,20 @@ public class PessoaController {
     }
 
     @PostMapping
-    public void adicionarPessoa(@Valid @RequestBody @NotBlank Pessoa pessoa){
-            this._pessoaService.adicionarPessoa(pessoa);
+    public ResponseEntity<Pessoa> adicionarPessoa(@Valid @RequestBody @NotBlank Pessoa pessoa){
+            var response = this._pessoaService.adicionarPessoa(pessoa);
+    return new ResponseEntity<Pessoa>(response, HttpStatus.CREATED);
+    }
 
+    @PutMapping(path = "{pessoaId}")
+    public void updatePessoa(
+            @PathVariable("pessoaId") Integer pessoaId,
+            @RequestParam(required = false) String nomePessoa,
+            @RequestParam(required = false) String cpfPessoa,
+            @RequestParam(required = false) String dataNascimentoPessoa){
+
+
+        this._pessoaService.updatePerson(pessoaId, nomePessoa, cpfPessoa, dataNascimentoPessoa);
     }
 
     @DeleteMapping(path = "{pessoaId}")
