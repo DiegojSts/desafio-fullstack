@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/pessoa")
@@ -22,10 +23,19 @@ public class PessoaController {
        return this._pessoaService.getPessoas();
     }
 
+    @GetMapping(path = "{pessoaId}")
+    public Optional<Pessoa> getPessoaById(@PathVariable("pessoaId")Integer pessoaId){
+        return this._pessoaService.getPessoaById(pessoaId);
+    }
+
     @PostMapping
     public void adicionarPessoa(@Valid @RequestBody @NotBlank Pessoa pessoa){
-
             this._pessoaService.adicionarPessoa(pessoa);
 
+    }
+
+    @DeleteMapping(path = "{pessoaId}")
+    public void deletePessoa(@PathVariable("pessoaId") Integer pessoaId){
+        this._pessoaService.deletePessoaById(pessoaId);
     }
 }

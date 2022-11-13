@@ -1,5 +1,6 @@
 package com.example.demo.pessoa;
 
+import com.example.demo.Errors.Errors;
 import com.example.demo.validadores.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,8 @@ import java.util.Optional;
 @Service
 public class PessoaService {
 private final PessoaRepository _pessoaRepository;
+private boolean exists = false;
+
 
     @Autowired
     public PessoaService(PessoaRepository pessoaRepository){
@@ -35,5 +38,21 @@ private final PessoaRepository _pessoaRepository;
             _pessoaRepository.save(pessoa);
 
         }
+
+    }
+
+    public Optional<Pessoa> getPessoaById(int pessoaId){
+        return _pessoaRepository.findById(pessoaId);
+    }
+
+    public void deletePessoaById(Integer pessoaId) {
+        this.exists = _pessoaRepository.existsById(pessoaId);
+
+        if(!this.exists){
+            Errors.findByIdError(pessoaId);
+        }
+
+        this._pessoaRepository.deleteById(pessoaId);
+
     }
 }
