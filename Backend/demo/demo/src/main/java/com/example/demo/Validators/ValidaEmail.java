@@ -1,4 +1,4 @@
-package com.example.demo.validadores;
+package com.example.demo.Validators;
 
 public class ValidaEmail {
     private static final String EMAIL_PATTERN =

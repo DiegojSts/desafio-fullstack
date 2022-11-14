@@ -1,7 +1,9 @@
-package com.example.demo.Model.pessoa;
+package com.example.demo.Services;
 
 import com.example.demo.Errors.Errors;
-import com.example.demo.validadores.Utils;
+import com.example.demo.Model.person.Pessoa;
+import com.example.demo.Model.person.PessoaRepository;
+import com.example.demo.Validators.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.example.demo.validadores;
+package com.example.demo.Validators;
 
 import com.example.demo.Errors.Errors;
 

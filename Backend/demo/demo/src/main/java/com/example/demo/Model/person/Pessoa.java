@@ -1,6 +1,6 @@
-package com.example.demo.Model.pessoa;
+package com.example.demo.Model.person;
 
-import com.example.demo.Model.contact.Models.Contact;
+import com.example.demo.Model.contact.Contact;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;

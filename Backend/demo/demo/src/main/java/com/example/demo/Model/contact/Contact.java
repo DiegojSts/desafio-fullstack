@@ -1,6 +1,4 @@
-package com.example.demo.Model.contact.Models;
-
-import com.example.demo.Model.pessoa.Pessoa;
+package com.example.demo.Model.contact;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -19,20 +17,8 @@ public class Contact {
     @NotBlank(message = "Telefone obrigatório")
     private String phone;
 
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "pessoa_id", nullable = false)
-//    private Pessoa pessoa;
-
     public Contact() {
     }
-
-//    public Pessoa getPessoa() {
-//        return pessoa;
-//    }
-//
-//    public void setPessoa(Pessoa pessoa) {
-//        this.pessoa = pessoa;
-//    }
 
     public Contact(String contactName, String email, String phone) {
         this.contactName = contactName;

@@ -1,7 +1,6 @@
-package com.example.demo.Model.pessoa;
+package com.example.demo.Model.person;
 
-import com.example.demo.Model.contact.Models.Contact;
-import com.example.demo.Model.contact.Repository.ContactRepository;
+import com.example.demo.Model.contact.Contact;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +14,7 @@ import static java.time.Month.*;
 public class PessoaConfig {
 
     @Bean
-    CommandLineRunner commandLineRunner(PessoaRepository repository, ContactRepository contactRepository) {
+    CommandLineRunner commandLineRunner(PessoaRepository repository) {
         return args -> {
 
             Contact contato = new Contact(
