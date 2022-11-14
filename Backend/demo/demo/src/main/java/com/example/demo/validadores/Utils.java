@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -85,4 +87,14 @@ public class Utils {
 
         return true;
     }
+
+
+    public static boolean isEmailValid(String emailString){
+    Pattern EMAIL_PATTERN =
+                Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = EMAIL_PATTERN.matcher(emailString);
+        return matcher.find();
+    }
+
 }

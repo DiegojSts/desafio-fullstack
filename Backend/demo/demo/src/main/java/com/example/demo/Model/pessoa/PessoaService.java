@@ -1,16 +1,12 @@
-package com.example.demo.pessoa;
+package com.example.demo.Model.pessoa;
 
 import com.example.demo.Errors.Errors;
 import com.example.demo.validadores.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;

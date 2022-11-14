@@ -1,22 +1,19 @@
-package com.example.demo.pessoa;
+package com.example.demo.Model.pessoa;
+
+import com.example.demo.Model.contact.Models.Contact;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table
+@Table(name = "pessoa")
 public class Pessoa {
     @Id
-    @SequenceGenerator(
-            name = "pessoa_sequence",
-            sequenceName = "pessoa_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "pessoa_sequence"
-    )
+    @SequenceGenerator(name = "pessoa_sequence", sequenceName = "pessoa_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pessoa_sequence")
     private int idPessoa;
 
     @NotBlank(message = "Nome obrigatório")
@@ -26,6 +23,10 @@ public class Pessoa {
     @NotNull
     private LocalDate dataNascimentoPessoa;
 
+    @OneToMany(targetEntity = Contact.class, cascade = CascadeType.ALL)
+    @Size(min = 1, message = "Obrigatório ao menos 1 contato")
+    private List<Contact> contacts = new ArrayList<>();
+
     public Pessoa (){}
     public Pessoa(String nomePessoa,
                   String cpfPessoa,
@@ -33,6 +34,14 @@ public class Pessoa {
         this.nomePessoa = nomePessoa;
         this.cpfPessoa = cpfPessoa;
         this.dataNascimentoPessoa = dataNascimentoPessoa;
+    }
+
+    public List<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
     }
 
     public int getIdPessoa() {

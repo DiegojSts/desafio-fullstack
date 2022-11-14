@@ -1,5 +1,4 @@
-package com.example.demo.pessoa;
-import com.example.demo.validadores.Utils;
+package com.example.demo.Model.pessoa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +30,7 @@ public class PessoaController {
     }
 
     @PostMapping
-    public ResponseEntity<Pessoa> adicionarPessoa(@Valid @RequestBody @NotBlank Pessoa pessoa){
+    public ResponseEntity<Pessoa> adicionarPessoa(@Valid @RequestBody Pessoa pessoa){
             var response = this._pessoaService.adicionarPessoa(pessoa);
     return new ResponseEntity<Pessoa>(response, HttpStatus.CREATED);
     }
@@ -42,7 +41,6 @@ public class PessoaController {
             @RequestParam(required = false) String nomePessoa,
             @RequestParam(required = false) String cpfPessoa,
             @RequestParam(required = false) String dataNascimentoPessoa){
-
 
         this._pessoaService.updatePerson(pessoaId, nomePessoa, cpfPessoa, dataNascimentoPessoa);
     }
