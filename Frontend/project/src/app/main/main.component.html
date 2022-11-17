@@ -1,6 +1,7 @@
 <table>
   <thead>
-    <tr>
+    <tr id="thead">
+      <th>ID</th>
       <th>Nome</th>
       <th>CPF</th>
       <th>Nascimento</th>
@@ -11,12 +12,16 @@
   </thead>
   <tbody *ngFor="let item of getAllPersonsResult; let i = index">
     <tr>
+      <td #idField> {{item.idPessoa}}</td>
       <td>{{ item.nomePessoa }}</td>
       <td>{{ item.cpfPessoa }}</td>
       <td>{{ item.dataNascimentoPessoa }}</td>
       <td>{{ item.contacts[0].contactName }}</td>
       <td>{{ item.contacts[0].email }}</td>
       <td>{{ item.contacts[0].phone }}</td>
+      <button type="button" (click)="deleteRow(item.idPessoa)">Deletar</button>
+      <button type="button">Atualizar</button>
+
     </tr>
   </tbody>
 </table>
@@ -68,7 +73,7 @@
 
 
   <br>
-  <input type="submit" (click)="enviarFormulario()">
+  <input type="submit" (click)="sendForm()">
 </form>
 
 </section>

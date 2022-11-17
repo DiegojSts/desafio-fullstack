@@ -29,12 +29,11 @@ export class PersonService {
 
   }
 
-  deletePersonById(personID: number): Observable<Person> {
-    return this.http.delete<Person>(`${this.BASE_URL}/${personID}`)
-    .pipe(
-      tap(console.log),
-      catchError(this.handleError)
-    )
+  deletePersonById(personID?: number): Subscription {
+    return this.http.delete<Person>(`${this.BASE_URL}/delete/${personID}`)
+    .subscribe((res) => {
+      console.log(res)
+    })
 
   }
 

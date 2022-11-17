@@ -14,6 +14,7 @@ export class MainComponent implements OnInit {
   sub!: Subscription;
   errorMessage = '';
   value= 0;
+  popUp = false;
 
   Form: FormGroup;
 
@@ -34,9 +35,9 @@ export class MainComponent implements OnInit {
     private personService: PersonService,
     private fb: FormBuilder) {
       this.Form = this.fb.group({
-        nomePessoa: ["ALEX", [Validators.required]],
-        cpfPessoa: ["60998142050", [Validators.required]],
-        dataNascimentoPessoa: ["", [Validators.required]],
+        nomePessoa: ["ALEX"],
+        cpfPessoa: ["60998142050"],
+        dataNascimentoPessoa: [""],
         contacts: this.fb.array([])
       })
 
@@ -87,10 +88,14 @@ export class MainComponent implements OnInit {
 
   }
 
-  enviarFormulario(){
+  sendForm(){
 
    this.personService.save(this.Form.value)
 
+  }
+
+  deleteRow(personID?: number){
+    this.personService.deletePersonById(personID)
   }
 
 

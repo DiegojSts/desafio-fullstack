@@ -1,4 +1,5 @@
 export interface Person {
+  idPessoa?: number;
   nomePessoa: string,
   cpfPessoa: string,
   dataNascimentoPessoa: Date;

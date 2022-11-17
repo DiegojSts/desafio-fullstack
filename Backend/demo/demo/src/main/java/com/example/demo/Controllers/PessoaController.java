@@ -50,6 +50,7 @@ public class PessoaController {
         this.personService.updatePerson(personID, pessoa);
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping(path = "delete/{personID}")
     public void deletePersonById(@PathVariable("personID") Integer personID){
         this.personService.deletePersonById(personID);
