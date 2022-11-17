@@ -1,5 +1,8 @@
 package com.example.demo.Errors;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 public class Errors {
     public static void cpfError(){
         throw new RuntimeException("CPF deve ser válido!");
@@ -14,7 +17,9 @@ public class Errors {
     }
 
     public static void findByIdError(int personId){
-        throw new RuntimeException("ID" + personId + " não existe!");
+
+        throw new RuntimeException("O ID " + personId + " não existe!");
+
     }
 
 }

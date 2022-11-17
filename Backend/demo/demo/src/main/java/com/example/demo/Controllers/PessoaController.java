@@ -14,41 +14,44 @@ import java.util.Optional;
 @RestController
 @RequestMapping(path = "api/pessoa")
 public class PessoaController {
-    private final PessoaService _pessoaService;
+    private final PessoaService personService;
 
     @Autowired
-    public PessoaController(PessoaService pessoaService){
-        this._pessoaService = pessoaService;
+    public PessoaController(PessoaService personService){
+        this.personService = personService;
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping
-    public List<Pessoa> getPessoas(){
-       return this._pessoaService.getPessoas();
+    @ResponseStatus(HttpStatus.OK)
+    public List<Pessoa> getAll(){
+       return this.personService.getAll();
     }
 
-    @GetMapping(path = "{pessoaId}")
-    public Optional<Pessoa> getPessoaById(@PathVariable("pessoaId")Integer pessoaId){
-        return this._pessoaService.getPessoaById(pessoaId);
+    @GetMapping(path = "{personID}")
+    public Optional<Pessoa> getPersonById(@PathVariable("personID")Integer personID){
+        return this.personService.getPersonById(personID);
+
     }
 
-    @PostMapping
-    public ResponseEntity<Pessoa> adicionarPessoa(@Valid @RequestBody Pessoa pessoa){
-            var response = this._pessoaService.adicionarPessoa(pessoa);
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping(path = "/save")
+    public ResponseEntity<Pessoa> addPerson(@Valid @RequestBody Pessoa pessoa){
+            var response = this.personService.addPerson(pessoa);
     return new ResponseEntity<Pessoa>(response, HttpStatus.CREATED);
     }
 
-    @PutMapping(path = "{pessoaId}")
-    public void updatePessoa(
-            @PathVariable("pessoaId") Integer pessoaId,
-            @RequestParam(required = false) String nomePessoa,
-            @RequestParam(required = false) String cpfPessoa,
-            @RequestParam(required = false) String dataNascimentoPessoa){
+    @PutMapping(path = "{personID}")
+    public void updatePerson(
+            @PathVariable("personID") Integer personID,
+            @RequestBody Pessoa pessoa)
+    {
 
-        this._pessoaService.updatePerson(pessoaId, nomePessoa, cpfPessoa, dataNascimentoPessoa);
+        this.personService.updatePerson(personID, pessoa);
     }
 
-    @DeleteMapping(path = "{pessoaId}")
-    public void deletePessoa(@PathVariable("pessoaId") Integer pessoaId){
-        this._pessoaService.deletePessoaById(pessoaId);
+    @DeleteMapping(path = "delete/{personID}")
+    public void deletePersonById(@PathVariable("personID") Integer personID){
+        this.personService.deletePersonById(personID);
     }
 }

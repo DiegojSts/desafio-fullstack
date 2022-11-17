@@ -1,6 +1,7 @@
 package com.example.demo.Model.person;
 
 import com.example.demo.Model.contact.Contact;
+import com.example.demo.Repository.PessoaRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,11 +23,7 @@ public class PessoaConfig {
                     "abc@gmail.com",
                     "123456"
             );
-            Contact contato2 = new Contact(
-                    "Teste2",
-                    "abcdefg@gmail.com",
-                    "123456090990909"
-            );
+
 
             Pessoa diego = new Pessoa(
                     "Diego",
@@ -34,7 +31,7 @@ public class PessoaConfig {
                     LocalDate.of(1997, FEBRUARY, 1)
             );
 
-            diego.setContacts(List.of(contato, contato2));
+            diego.setContacts(List.of(contato));
 
             repository.saveAll(List.of(diego));
 

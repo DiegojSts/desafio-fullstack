@@ -1,93 +1,112 @@
 package com.example.demo.Services;
 
 import com.example.demo.Errors.Errors;
+import com.example.demo.Model.contact.Contact;
 import com.example.demo.Model.person.Pessoa;
-import com.example.demo.Model.person.PessoaRepository;
+import com.example.demo.Repository.PessoaRepository;
 import com.example.demo.Validators.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class PessoaService {
-private final PessoaRepository _pessoaRepository;
-private boolean exists = false;
+    private final PessoaRepository personRepository;
+    private boolean exists = false;
 
 
     @Autowired
-    public PessoaService(PessoaRepository pessoaRepository){
-        this._pessoaRepository = pessoaRepository;
-    }
-    public List<Pessoa> getPessoas() {
-//
-        return _pessoaRepository.findAll();
+    public PessoaService(PessoaRepository pessoaRepository) {
+        this.personRepository = pessoaRepository;
     }
 
-    public Pessoa adicionarPessoa(Pessoa pessoa) {
+    public List<Pessoa> getAll() {
+//
+        return personRepository.findAll();
+    }
+
+    public Pessoa addPerson(Pessoa pessoa) {
         boolean isValid;
 
         isValid = Utils
                 .executeCheck(pessoa.getCpfPessoa(),
                         pessoa.getDataNascimentoPessoa().toString(), "yyyy-MM-dd");
-        if(!isValid){
+        if (!isValid) {
             throw new IllegalStateException("");
         }
 
-        return _pessoaRepository.save(pessoa);
+        return personRepository.save(pessoa);
 
     }
 
-    public Optional<Pessoa> getPessoaById(int pessoaId){
-        return _pessoaRepository.findById(pessoaId);
+    public Optional<Pessoa> getPersonById(int personID) {
+        this.exists = personRepository.existsById(personID);
+
+        if (!this.exists) {
+            Errors.findByIdError(personID);
+        }
+        return personRepository.findById(personID);
     }
 
-    public void deletePessoaById(Integer pessoaId) {
-        this.exists = _pessoaRepository.existsById(pessoaId);
+    public void deletePersonById(Integer personID) {
+        this.exists = personRepository.existsById(personID);
 
-        if(!this.exists){
-            Errors.findByIdError(pessoaId);
+        if (!this.exists) {
+            Errors.findByIdError(personID);
         }
 
-        this._pessoaRepository.deleteById(pessoaId);
+        this.personRepository.deleteById(personID);
 
     }
 
     @Transactional
-    public void updatePerson(Integer pessoaId,
-                             String nomePessoa,
-                             String cpfPessoa,
-                             String dataNascimentoPessoa) {
-        this.exists = _pessoaRepository.existsById(pessoaId);
+    public void updatePerson(Integer personID, Pessoa personFromPutRequest) {
+        this.exists = personRepository.existsById(personID);
 
 
-        if(!this.exists){
-            Errors.findByIdError(pessoaId);
-        }
+        Pessoa personFoundInRepository = personRepository.findById(personID)
+                .orElseThrow(() -> new IllegalStateException("Pessoa de id" + personID + "não existe!"));
 
-        Pessoa pessoa = _pessoaRepository.findById(pessoaId)
-                .orElseThrow(() -> new IllegalStateException("Pessoa de id" + pessoaId + "não existe!"));
-
-        if (nomePessoa != null &&
-                nomePessoa.length() > 0 &&
-                !Objects.equals(pessoa.getNomePessoa(), nomePessoa)
+        if (personFromPutRequest.getNomePessoa() != null &&
+                personFromPutRequest.getNomePessoa().length() > 0 &&
+                !Objects.equals(personFromPutRequest.getNomePessoa(), personFoundInRepository.getNomePessoa())
         ) {
-            pessoa.setNomePessoa(nomePessoa);
+            personFoundInRepository.setNomePessoa(personFromPutRequest.getNomePessoa());
+        }
+//
+        if (Utils.isCPF(personFromPutRequest.getCpfPessoa()) &&
+                !Objects.equals(personFoundInRepository.getCpfPessoa(), personFromPutRequest.getCpfPessoa()))
+        {
+            personFoundInRepository.setCpfPessoa(personFromPutRequest.getCpfPessoa());
+        }
+//
+        if (!Utils.isDateFuture(personFromPutRequest.getDataNascimentoPessoa().toString(), "yyyy-MM-dd") &&
+                !Objects.equals(personFoundInRepository.getDataNascimentoPessoa(), personFromPutRequest.getDataNascimentoPessoa())
+        ) {
+            personFoundInRepository
+                    .setDataNascimentoPessoa(LocalDate.parse(personFromPutRequest
+                            .getDataNascimentoPessoa()
+                            .toString()));
         }
 
-        if(Utils.isCPF(cpfPessoa) &&
-                !Objects.equals(pessoa.getCpfPessoa(), cpfPessoa)){
-            pessoa.setCpfPessoa(cpfPessoa);
+//        List<Pessoa> contactsFromPerson = new ArrayList<>();
+        for (int index = 0; index < personFoundInRepository.getContacts().size(); index++) {
+            if(personFromPutRequest.getContacts().get(index).getContactName() != null){
+
+                personFoundInRepository.getContacts().set(index, new Contact(
+                        personFromPutRequest.getContacts().get(index).getContactName(),
+                        "EmailModificadoNaMao",
+                        "PhoneNaMao"));
+
+            }
+
         }
 
-        if (!Utils.isDateFuture(dataNascimentoPessoa, "yyyy-MM-dd") &&
-            !Objects.equals(pessoa.getDataNascimentoPessoa(), dataNascimentoPessoa)
-        ){
-            pessoa.setDataNascimentoPessoa(LocalDate.parse(dataNascimentoPessoa.toString()));
-        }
     }
 }
