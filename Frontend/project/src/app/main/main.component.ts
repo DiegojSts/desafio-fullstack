@@ -156,7 +156,6 @@ export class MainComponent implements OnInit {
         })
       )
     })
-   window.location.reload();
 
 
   }
