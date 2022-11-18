@@ -113,7 +113,6 @@ export class MainComponent implements OnInit {
 
   sendForm(){
    this.personService.save(this.Form.value)
-   window.location.reload();
 
   }
 
