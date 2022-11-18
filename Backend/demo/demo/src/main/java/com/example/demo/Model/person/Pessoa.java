@@ -28,6 +28,16 @@ public class Pessoa {
     private List<Contact> contacts = new ArrayList<>();
 
     public Pessoa (){}
+
+    public Pessoa(Pessoa pessoa, int idPessoa){
+
+        this.idPessoa = idPessoa;
+        this.nomePessoa = pessoa.getNomePessoa();
+        this.cpfPessoa = pessoa.getCpfPessoa();
+        this.dataNascimentoPessoa = pessoa.getDataNascimentoPessoa();
+        this.contacts = pessoa.getContacts();
+
+    }
     public Pessoa(String nomePessoa,
                   String cpfPessoa,
                   LocalDate dataNascimentoPessoa) {

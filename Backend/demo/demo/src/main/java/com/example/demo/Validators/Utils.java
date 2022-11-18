@@ -80,7 +80,6 @@ public class Utils {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(dateFormat);
         LocalDate inputDate = LocalDate.parse(date, dtf);
 
-        System.out.println(inputDate.isAfter(localDate));
         if (inputDate.isAfter(localDate)) {
             Errors.birthDate();
         }

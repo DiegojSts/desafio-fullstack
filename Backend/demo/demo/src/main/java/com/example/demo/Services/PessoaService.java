@@ -3,31 +3,32 @@ package com.example.demo.Services;
 import com.example.demo.Errors.Errors;
 import com.example.demo.Model.contact.Contact;
 import com.example.demo.Model.person.Pessoa;
+import com.example.demo.Repository.ContactRepository;
 import com.example.demo.Repository.PessoaRepository;
 import com.example.demo.Validators.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PessoaService {
     private final PessoaRepository personRepository;
+    private final ContactRepository contactRepository;
     private boolean exists = false;
 
 
     @Autowired
-    public PessoaService(PessoaRepository pessoaRepository) {
+    public PessoaService(PessoaRepository pessoaRepository, ContactRepository contactRepository) {
         this.personRepository = pessoaRepository;
+        this.contactRepository = contactRepository;
+
     }
 
     public List<Pessoa> getAll() {
-//
+
         return personRepository.findAll();
     }
 
@@ -42,7 +43,6 @@ public class PessoaService {
         }
 
         return personRepository.save(pessoa);
-
     }
 
     public Optional<Pessoa> getPersonById(int personID) {
@@ -64,49 +64,28 @@ public class PessoaService {
         this.personRepository.deleteById(personID);
 
     }
-
-    @Transactional
     public void updatePerson(Integer personID, Pessoa personFromPutRequest) {
-        this.exists = personRepository.existsById(personID);
+
+        personRepository.findById(personID).orElseThrow(() -> new IllegalStateException("Pessoa de id" + personID + "não existe!"));
 
 
-        Pessoa personFoundInRepository = personRepository.findById(personID)
-                .orElseThrow(() -> new IllegalStateException("Pessoa de id" + personID + "não existe!"));
-
-        if (personFromPutRequest.getNomePessoa() != null &&
-                personFromPutRequest.getNomePessoa().length() > 0 &&
-                !Objects.equals(personFromPutRequest.getNomePessoa(), personFoundInRepository.getNomePessoa())
-        ) {
-            personFoundInRepository.setNomePessoa(personFromPutRequest.getNomePessoa());
-        }
-//
-        if (Utils.isCPF(personFromPutRequest.getCpfPessoa()) &&
-                !Objects.equals(personFoundInRepository.getCpfPessoa(), personFromPutRequest.getCpfPessoa()))
-        {
-            personFoundInRepository.setCpfPessoa(personFromPutRequest.getCpfPessoa());
-        }
-//
-        if (!Utils.isDateFuture(personFromPutRequest.getDataNascimentoPessoa().toString(), "yyyy-MM-dd") &&
-                !Objects.equals(personFoundInRepository.getDataNascimentoPessoa(), personFromPutRequest.getDataNascimentoPessoa())
-        ) {
-            personFoundInRepository
-                    .setDataNascimentoPessoa(LocalDate.parse(personFromPutRequest
-                            .getDataNascimentoPessoa()
-                            .toString()));
+        if (!Utils.isCPF(personFromPutRequest.getCpfPessoa())) {
+            throw new IllegalStateException("CPF deve ser válido!");
         }
 
-//        List<Pessoa> contactsFromPerson = new ArrayList<>();
-        for (int index = 0; index < personFoundInRepository.getContacts().size(); index++) {
-            if(personFromPutRequest.getContacts().get(index).getContactName() != null){
-
-                personFoundInRepository.getContacts().set(index, new Contact(
-                        personFromPutRequest.getContacts().get(index).getContactName(),
-                        "EmailModificadoNaMao",
-                        "PhoneNaMao"));
-
-            }
-
+        if (!Utils.isDateFuture(personFromPutRequest.getDataNascimentoPessoa().toString(), "yyyy-MM-dd")) {
+            throw new IllegalStateException("Data não pode ser futura!");
         }
+
+        Pessoa personFoundInRepository;
+
+        var listIds = personFromPutRequest.getContacts().stream().map(Contact::getContactId).collect(Collectors.toList());
+        personFoundInRepository = new Pessoa(personFromPutRequest, personID);
+
+        personRepository.save(personFoundInRepository);
+        contactRepository.deleteAllById(listIds);
+
+
 
     }
 }

@@ -18,12 +18,18 @@ public class PessoaConfig {
     CommandLineRunner commandLineRunner(PessoaRepository repository) {
         return args -> {
 
+
             Contact contato = new Contact(
                     "Teste",
                     "abc@gmail.com",
                     "123456"
             );
 
+            Contact contato2 = new Contact(
+                    "SAGSAOGIJSAIOGASGAS",
+                    "abc@gmail.com",
+                    "12318294012941456"
+            );
 
             Pessoa diego = new Pessoa(
                     "Diego",
@@ -31,7 +37,7 @@ public class PessoaConfig {
                     LocalDate.of(1997, FEBRUARY, 1)
             );
 
-            diego.setContacts(List.of(contato));
+            diego.setContacts(List.of(contato, contato2));
 
             repository.saveAll(List.of(diego));
 
