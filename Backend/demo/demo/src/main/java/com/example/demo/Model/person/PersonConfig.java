@@ -1,21 +1,19 @@
 package com.example.demo.Model.person;
-
 import com.example.demo.Model.contact.Contact;
-import com.example.demo.Repository.PessoaRepository;
+import com.example.demo.Repository.PersonRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import java.time.LocalDate;
 import java.util.List;
 
 import static java.time.Month.*;
 
 @Configuration
-public class PessoaConfig {
+public class PersonConfig {
 
     @Bean
-    CommandLineRunner commandLineRunner(PessoaRepository repository) {
+    CommandLineRunner commandLineRunner(PersonRepository repository) {
         return args -> {
 
 
@@ -31,7 +29,7 @@ public class PessoaConfig {
                     "12318294012941456"
             );
 
-            Pessoa diego = new Pessoa(
+            Person diego = new Person(
                     "Diego",
                     "11111111111",
                     LocalDate.of(1997, FEBRUARY, 1)

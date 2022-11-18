@@ -2,10 +2,10 @@ package com.example.demo.Services;
 
 import com.example.demo.Errors.Errors;
 import com.example.demo.Model.contact.Contact;
-import com.example.demo.Model.person.Pessoa;
+import com.example.demo.Model.person.Person;
 import com.example.demo.Repository.ContactRepository;
-import com.example.demo.Repository.PessoaRepository;
-import com.example.demo.Validators.Utils;
+import com.example.demo.Repository.PersonRepository;
+import com.example.demo.Validators.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,38 +14,38 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class PessoaService {
-    private final PessoaRepository personRepository;
+public class PersonService {
+    private final PersonRepository personRepository;
     private final ContactRepository contactRepository;
     private boolean exists = false;
 
 
     @Autowired
-    public PessoaService(PessoaRepository pessoaRepository, ContactRepository contactRepository) {
-        this.personRepository = pessoaRepository;
+    public PersonService(PersonRepository personRepository, ContactRepository contactRepository) {
+        this.personRepository = personRepository;
         this.contactRepository = contactRepository;
 
     }
 
-    public List<Pessoa> getAll() {
+    public List<Person> getAll() {
 
         return personRepository.findAll();
     }
 
-    public Pessoa addPerson(Pessoa pessoa) {
+    public Person addPerson(Person person) {
         boolean isValid;
 
-        isValid = Utils
-                .executeCheck(pessoa.getCpfPessoa(),
-                        pessoa.getDataNascimentoPessoa().toString(), "yyyy-MM-dd");
+        isValid = PersonValidator
+                .executeCheck(person.getCpf(),
+                        person.getBirthDate().toString(), "yyyy-MM-dd");
         if (!isValid) {
             throw new IllegalStateException("");
         }
 
-        return personRepository.save(pessoa);
+        return personRepository.save(person);
     }
 
-    public Optional<Pessoa> getPersonById(int personID) {
+    public Optional<Person> getPersonById(int personID) {
         this.exists = personRepository.existsById(personID);
 
         if (!this.exists) {
@@ -64,23 +64,23 @@ public class PessoaService {
         this.personRepository.deleteById(personID);
 
     }
-    public void updatePerson(Integer personID, Pessoa personFromPutRequest) {
+    public void updatePerson(Integer personID, Person personFromPutRequest) {
 
         personRepository.findById(personID).orElseThrow(() -> new IllegalStateException("Pessoa de id" + personID + "não existe!"));
 
 
-        if (!Utils.isCPF(personFromPutRequest.getCpfPessoa())) {
+        if (!PersonValidator.isCPF(personFromPutRequest.getCpf())) {
             throw new IllegalStateException("CPF deve ser válido!");
         }
 
-        if (!Utils.isDateFuture(personFromPutRequest.getDataNascimentoPessoa().toString(), "yyyy-MM-dd")) {
+        if (!PersonValidator.isDateFuture(personFromPutRequest.getBirthDate().toString(), "yyyy-MM-dd")) {
             throw new IllegalStateException("Data não pode ser futura!");
         }
 
-        Pessoa personFoundInRepository;
+        Person personFoundInRepository;
 
         var listIds = personFromPutRequest.getContacts().stream().map(Contact::getContactId).collect(Collectors.toList());
-        personFoundInRepository = new Pessoa(personFromPutRequest, personID);
+        personFoundInRepository = new Person(personFromPutRequest, personID);
 
         personRepository.save(personFoundInRepository);
         contactRepository.deleteAllById(listIds);

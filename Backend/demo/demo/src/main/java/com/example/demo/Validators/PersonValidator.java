@@ -9,7 +9,7 @@ import java.util.InputMismatchException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Utils {
+public class PersonValidator {
 
     private static boolean isValid;
     public static boolean executeCheck(String CPF, final String date, final String dateFormat){
