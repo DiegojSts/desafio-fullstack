@@ -14,7 +14,7 @@ export class PersonService {
   getAll(): Observable<Person[]> {
     return this.http.get<Person[]>(`${this.BASE_URL}`)
     .pipe(
-      tap(data => console.log(JSON.stringify(data))),
+      tap(data => JSON.stringify(data)),
       catchError(this.handleError)
     )
 
@@ -37,20 +37,27 @@ export class PersonService {
 
   }
 
-  save(person: Person): Subscription {
+  save(person: Person): Observable<Person> {
 
     return this.http.post<Person>(`${this.BASE_URL}/save`, person)
-    .subscribe((res) => {
-      console.log(res)
-    })
+    .pipe(
+      tap(console.log),
+      catchError(this.handleError)
+    )
 
 
   }
 
+  update(person: Person, id?: number): Observable<Person> {
+    return this.http.put<Person>(`${this.BASE_URL}/${id}`, person)
+    .pipe(
+      tap(console.log),
+      catchError(this.handleError)
+    )
+  }
 
 
   private handleError(error: HttpErrorResponse): Observable<never> {
-    console.log(error);
     return  throwError(`Ocorreu um erro! Codigo do erro: ${error.status}`);
   }
 }

@@ -11,25 +11,102 @@
     </tr>
   </thead>
   <tbody *ngFor="let item of getAllPersonsResult; let i = index">
+
     <tr>
-      <td #idField> {{item.idPessoa}}</td>
-      <td>{{ item.nomePessoa }}</td>
+      <td> {{item.idPessoa}}</td>
+      <td>{{ item.nomePessoa}}</td>
       <td>{{ item.cpfPessoa }}</td>
       <td>{{ item.dataNascimentoPessoa }}</td>
-      <td>{{ item.contacts[0].contactName }}</td>
-      <td>{{ item.contacts[0].email }}</td>
-      <td>{{ item.contacts[0].phone }}</td>
-      <button type="button" (click)="deleteRow(item.idPessoa)">Deletar</button>
-      <button type="button">Atualizar</button>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
 
     </tr>
+    <tr *ngFor="let item2 of item.contacts; let i = index">
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>{{ item2.contactName }}</td>
+      <td>{{ item2.email }}</td>
+      <td>{{ item2.phone }}</td>
+    </tr>
+      <button type="button" (click)="deleteRow(item.idPessoa)">Deletar</button>
+      <button type="button" (click)="updateRow(item.idPessoa, getAllPersonsResult)">Atualizar</button>
+
+
+
   </tbody>
 </table>
 
 <br>
 
+<div [hidden]="showUpdateForm">
+  <fieldset >
+    <legend><h4>Atualizar Contato de ID {{idContact}}</h4></legend>
+
+    <form ngNativeValidate [formGroup]="updateForm">
+    <label for="nomePessoa">Nome </label><br>
+      <input required name="nomePessoa" type="text" placeholder="Digite o seu nome" formControlName="nomePessoa"><br>
+
+      <label for="cpfPessoa">CPF </label><br>
+      <input required name="cpfPessoa" type="text" placeholder="Digite o seu nome" formControlName="cpfPessoa"><br>
+
+      <label for="dataNascimentoPessoa">Data Nascimento</label><br>
+      <input required name="dataNascimentoPessoa" type="date" placeholder="Digite o seu nome" formControlName="dataNascimentoPessoa"><br><br>
+
+
+      <div formArrayName="contacts">
+        <div *ngFor="let contact of aliasesArrayControlUpdate.controls; let i =index">
+          <div [formGroupName]="i">
+
+            <fieldset>
+              <legend>Contato</legend>
+               <label for="contactName">Nome do contato</label><br>
+              <input required name="contactName" formControlName="contactName" type="text"><br>
+
+              <label for="contactName">Telefone</label><br>
+              <input required name="phone" formControlName="phone" type="text"><br>
+
+              <label for="contactName">Email</label><br>
+              <input required name="email" formControlName="email" type="text"><br><br><br>
+
+            <button (click)="deleteContactFromUpdate(i)"> Deletar contato</button> <br>
+            </fieldset>
+
+
+
+
+
+            </div>
+          </div>
+          <br>
+          <button (click)="sendUpdate()">Atualizar contato</button>
+
+      </div>
+    </form>
+
+  </fieldset>
+
+
+
+</div>
+
+<br>
+
+<!-- <pre>
+  {{updateForm.value | json }}
+</pre>
+
+<hr>
+
+<pre>{{getAllPersonsResult | json}}</pre>
+
+<hr>
+
 <pre>{{Form.value | json}}</pre>
 
+<hr> -->
 
 <section class="container">
   <form ngNativeValidate [formGroup]="Form">
