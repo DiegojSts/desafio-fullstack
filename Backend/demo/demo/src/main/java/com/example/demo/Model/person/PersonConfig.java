@@ -18,20 +18,20 @@ public class PersonConfig {
 
 
             Contact contato = new Contact(
-                    "Teste",
-                    "abc@gmail.com",
-                    "123456"
+                    "NomeContato1",
+                    "NomeContato1@gmail.com",
+                    "71900000000"
             );
 
             Contact contato2 = new Contact(
-                    "SAGSAOGIJSAIOGASGAS",
-                    "abc@gmail.com",
-                    "12318294012941456"
+                    "NomeContato2",
+                    "NomeContato1@gmail.com",
+                    "11900000000"
             );
 
             Person diego = new Person(
                     "Diego",
-                    "11111111111",
+                    "50715438000",
                     LocalDate.of(1997, FEBRUARY, 1)
             );
 

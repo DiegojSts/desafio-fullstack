@@ -32,20 +32,14 @@ export class PersonService {
       });
   }
 
-  // save(person: Person): Subscription {
+  save(person: Person): Subscription {
 
-  //   return this.http.post<Person>(`${this.BASE_URL}/save`, person)
-  //   .subscribe((res) => {
-  //     console.log(res)
-  //   })
-  // }
-
-  save(person: Person): Observable<Person> {
-    return this.http.post<Person>(`${this.BASE_URL}/save`, person).pipe(
-      tap((data) => JSON.stringify(data)),
-      catchError(this.handleError)
-    );
+    return this.http.post<Person>(`${this.BASE_URL}/save`, person)
+    .subscribe((res) => {
+      console.log(res)
+    })
   }
+
 
   update(person: Person, id?: number): Observable<Person> {
     return this.http.put<Person>(`${this.BASE_URL}/${id}`, person)
