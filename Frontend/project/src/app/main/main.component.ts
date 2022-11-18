@@ -10,45 +10,36 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent implements OnInit {
+  // Variaveis
   getAllPersonsResult: Person[] = [] ;
   sub!: Subscription;
-  errorMessage = '';
+  errorMessage : any;
+  sucessResponse: any;
   value= 0;
   popUp = false;
   showUpdateForm = true;
   idContact? = 0;
   arr?: any;
 
+  // Forms
   Form: FormGroup;
   updateForm: FormGroup;
 
-  data: Person = {
-    nomePessoa: "Alex",
-    cpfPessoa: "60998142050",
-    dataNascimentoPessoa: new Date,
-    contacts:[
-      {
-        contactName:"Contato do Alex",
-        email:"contatoDoAlex@gmail.com",
-        phone:"99999999999"
-      }
-    ]
-  }
 
   constructor(
     private personService: PersonService,
     private fb: FormBuilder) {
       this.Form = this.fb.group({
-        nomePessoa: [""],
-        cpfPessoa: [""],
-        dataNascimentoPessoa: [""],
+        name: [""],
+        cpf: [""],
+        birthDate: [""],
         contacts: this.fb.array([])
       })
 
       this.updateForm = this.fb.group({
-        nomePessoa: [""],
-        cpfPessoa: [""],
-        dataNascimentoPessoa: [""],
+        name: [""],
+        cpf: [""],
+        birthDate: [""],
         contacts: this.fb.array([])
       })
 
@@ -70,27 +61,32 @@ export class MainComponent implements OnInit {
 
   }
 
+  // Atalho para retorno de contatos no Form
   get aliasesArrayControl(){
 
     return <FormArray> this.Form.controls['contacts']
 
   }
 
+
+    // Atalho para retorno de contatos no updateForm
   get aliasesArrayControlUpdate(){
     return <FormArray> this.updateForm.controls['contacts']
   }
 
   setContacts(){
     let control = <FormArray> this.Form.controls['contacts'];
-    this.data.contacts.forEach(x => {
-      control.push(this.fb.group({
-        contactName:[""],
-        email: [""],
-        phone:[""]
-      }))
-    })
+    // this.data.contacts.forEach(x => {
+    //   control.push(this.fb.group({
+    //     contactName:[""],
+    //     email: [""],
+    //     phone:[""]
+    //   }))
+    // })
   }
 
+
+  // Adiciona nova contato
   addNewContact(){
     let control = <FormArray> this.Form.controls['contacts'];
     control.push(
@@ -102,28 +98,29 @@ export class MainComponent implements OnInit {
     )
   }
 
+  // Deleta contato pelo index
   deleteContact(index: any){
     let control = <FormArray> this.Form.controls['contacts'];
     control.removeAt(index);
 
   }
 
+  // Deleta contato atribuido ao update
   deleteContactFromUpdate(index: any){
     let control = <FormArray> this.updateForm.controls['contacts'];
     control.removeAt(index);
   }
 
   sendForm(){
-
    this.personService.save(this.Form.value)
-   window.location.reload
-
+   window.location.reload();
 
   }
 
   deleteRow(personID?: number){
     this.personService.deletePersonById(personID)
-    window.location.reload
+   window.location.reload();
+
 
   }
 
@@ -132,12 +129,12 @@ export class MainComponent implements OnInit {
     this.showUpdateForm = !this.showUpdateForm;
     this.idContact = id;
 
-    let arrFiltered = arr?.find(item  => item.idPessoa == id);
+    let arrFiltered = arr?.find(item  => item.id == id);
 
     this.updateForm = this.fb.group({
-      nomePessoa: arrFiltered?.nomePessoa,
-      cpfPessoa: arrFiltered?.cpfPessoa,
-      dataNascimentoPessoa: arrFiltered?.dataNascimentoPessoa,
+      name: arrFiltered?.name,
+      cpf: arrFiltered?.cpf,
+      birthDate: arrFiltered?.birthDate,
       contacts: this.fb.array([])
 
     })
@@ -146,7 +143,7 @@ export class MainComponent implements OnInit {
 
   setUpdate(id?: number, arr?: Array<Person>){
     let control = <FormArray> this.updateForm.controls['contacts'];
-    var arrFiltered = arr?.find(item  => item.idPessoa == id);
+    var arrFiltered = arr?.find(item  => item.id == id);
 
     arrFiltered?.contacts.forEach(contact => {
 
@@ -159,11 +156,25 @@ export class MainComponent implements OnInit {
         })
       )
     })
+   window.location.reload();
+
 
   }
 
   sendUpdate(){
-    window.location.reload
-    this.personService.update(this.updateForm.value, this.idContact)
+
+      this.sub = this.personService.update(this.updateForm.value, this.idContact)
+      .subscribe((response) => {
+        alert("Enviado corretamente!")
+        window.location.reload();
+      },
+
+      (error) => {
+
+        this.errorMessage = error;
+        alert(this.errorMessage)
+      })
+
   }
+
 }

@@ -1,16 +1,14 @@
 export interface Person {
-  idPessoa?: number;
-  nomePessoa?: string,
-  cpfPessoa?: string,
-  dataNascimentoPessoa?: Date;
+  id?: number;
+  name: string;
+  cpf: string;
+  birthDate?: Date;
   contacts: [
     {
-    contactId?: number,
-    contactName: string,
-    email: string,
-    phone: string
-  }
-]
-
+      contactId?: number;
+      contactName: string;
+      email: string;
+      phone: string;
+    }
+  ];
 }
-

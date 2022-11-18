@@ -13,26 +13,26 @@
   <tbody *ngFor="let item of getAllPersonsResult; let i = index">
 
     <tr>
-      <td> {{item.idPessoa}}</td>
-      <td>{{ item.nomePessoa}}</td>
-      <td>{{ item.cpfPessoa }}</td>
-      <td>{{ item.dataNascimentoPessoa }}</td>
+      <td> {{item.id}}</td>
+      <td>{{ item.name}}</td>
+      <td>{{ item.cpf }}</td>
+      <td>{{ item.birthDate }}</td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
 
     </tr>
-    <tr *ngFor="let item2 of item.contacts; let i = index">
+    <tr *ngFor="let itemContacts of item.contacts; let i = index">
       <td>&nbsp;</td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
-      <td>{{ item2.contactName }}</td>
-      <td>{{ item2.email }}</td>
-      <td>{{ item2.phone }}</td>
+      <td>{{ itemContacts.contactName }}</td>
+      <td>{{ itemContacts.email }}</td>
+      <td>{{ itemContacts.phone }}</td>
     </tr>
-      <button type="button" (click)="deleteRow(item.idPessoa)">Deletar</button>
-      <button type="button" (click)="updateRow(item.idPessoa, getAllPersonsResult)">Atualizar</button>
+      <button type="button" (click)="deleteRow(item.id)">Deletar</button>
+      <button type="button" (click)="updateRow(item.id, getAllPersonsResult)">Atualizar</button>
 
 
 
@@ -41,19 +41,20 @@
 
 <br>
 
+<!-- Form de update -->
 <div [hidden]="showUpdateForm">
   <fieldset >
     <legend><h4>Atualizar Contato de ID {{idContact}}</h4></legend>
 
     <form ngNativeValidate [formGroup]="updateForm">
-    <label for="nomePessoa">Nome </label><br>
-      <input required name="nomePessoa" type="text" placeholder="Digite o seu nome" formControlName="nomePessoa"><br>
+    <label for="name">Nome </label><br>
+      <input required name="name" type="text" placeholder="Digite o seu nome" formControlName="name"><br>
 
-      <label for="cpfPessoa">CPF </label><br>
-      <input required name="cpfPessoa" type="text" placeholder="Digite o seu nome" formControlName="cpfPessoa"><br>
+      <label for="cpf">CPF </label><br>
+      <input required name="cpf" type="text" placeholder="Digite o seu nome" formControlName="cpf"><br>
 
-      <label for="dataNascimentoPessoa">Data Nascimento</label><br>
-      <input required name="dataNascimentoPessoa" type="date" placeholder="Digite o seu nome" formControlName="dataNascimentoPessoa"><br><br>
+      <label for="birthDate">Data Nascimento</label><br>
+      <input required name="birthDate" type="date" placeholder="Digite o seu nome" formControlName="birthDate"><br><br>
 
 
       <div formArrayName="contacts">
@@ -73,11 +74,6 @@
 
             <button (click)="deleteContactFromUpdate(i)"> Deletar contato</button> <br>
             </fieldset>
-
-
-
-
-
             </div>
           </div>
           <br>
@@ -94,7 +90,7 @@
 
 <br>
 
-<!-- <pre>
+ <!-- <pre>
   {{updateForm.value | json }}
 </pre>
 
@@ -108,19 +104,20 @@
 
 <hr> -->
 
+<!-- Form Pessoa -->
 <section class="container">
   <form ngNativeValidate [formGroup]="Form">
 
     <fieldset>
       <legend><h2>Pessoa </h2></legend>
-      <label for="nomePessoa">Nome </label><br>
-      <input required name="nomePessoa" type="text" placeholder="Digite o seu nome" formControlName="nomePessoa"><br>
+      <label for="name">Nome </label><br>
+      <input required name="name" type="text" placeholder="Digite o seu nome" formControlName="name"><br>
 
-      <label for="cpfPessoa">CPF </label><br>
-      <input required name="cpfPessoa" type="text" placeholder="Digite o seu nome" formControlName="cpfPessoa"><br>
+      <label for="cpf">CPF </label><br>
+      <input required name="cpf" type="text" placeholder="Digite o seu nome" formControlName="cpf"><br>
 
-      <label for="dataNascimentoPessoa">Data Nascimento</label><br>
-      <input required name="dataNascimentoPessoa" type="date" placeholder="Digite o seu nome" formControlName="dataNascimentoPessoa"><br><br>
+      <label for="birthDate">Data Nascimento</label><br>
+      <input required name="birthDate" type="date" placeholder="Digite o seu nome" formControlName="birthDate"><br><br>
 
       <button type="button" (click)="addNewContact()">Gerar um novo contato</button>
     </fieldset>
@@ -146,8 +143,6 @@
         </div>
       </div>
     </div>
-
-
 
   <br>
   <input type="submit" (click)="sendForm()">
